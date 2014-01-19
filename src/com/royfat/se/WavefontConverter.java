@@ -16,6 +16,7 @@ package com.royfat.se;
 		public float[] v;  
 		public float[] vt;  
 		public short[] f; 
+		public float[] mesh2;
 		public   short[] by;
 		public float[] textureMap;
 		public float[] normals;
@@ -149,7 +150,7 @@ package com.royfat.se;
 
 
 			HashMap<String, Integer>hashMap  = new HashMap<String, Integer>();
-		   float[] mesh2 = new float[9* map.keySet().size()];
+		  mesh2 = new float[9* map.keySet().size()];
 		 
 		   int index =0;
 		   List<String> list =  new ArrayList<String>();
@@ -174,34 +175,47 @@ package com.royfat.se;
 			   hashMap.put(key, index);
 			   index++;
 		   }
-		   int size = mesh2.length/1024;
-		   meshes = new ArrayList<float[]>(size);
 		   
-		   p  = 0;
-		   for(int i = 0;i < size;i++){
-
-				  float[] newa = Arrays.copyOfRange(mesh2, p,p+1024);
-				  
-				  meshes.add(newa);
-				  p+= 1024;
-		   }
-		  
+		   
 		   by = new short[keyporder.length];
-			for(int i=0;i <by.length;i++) {
-				by[i] =   Short.parseShort(""+hashMap.get(keyporder[i]));
-				   
-			}
-			
-			     p  = 0;
-			   	indices = new ArrayList<short[]>(size);
-			    size = Math.round(by.length/1024);
-			   for(int i = 0;i < size;i++){
+           for(int i=0;i <by.length;i++) {
+                   by[i] =   Short.parseShort(""+hashMap.get(keyporder[i]));
+                      
+           }
+		   
 
-				   short[] newa = Arrays.copyOfRange(by, p,p+1024);
-					  
-				   indices.add(newa);
-					  p+= 1024;
-			   }
+		   meshes = new ArrayList<float[]>();
+		   int times =  mesh2.length/1024;
+		   int  i =0;
+		  if(times > 0 ){
+			  
+			  while(i < times) {
+				  float[] newa =Arrays.copyOfRange(mesh2, i*1024,(i*1024)+1024);
+				  meshes.add(newa);
+				  i++;
+			  }
+			
+		  }else {
+			  meshes.add(mesh2);
+		  }
+		   
+		 indices = new  ArrayList<short[]>();
+		 times = by.length/1024;
+		 i = 0;
+		 if(times > 0 ){
+			 
+			  while(i < times) {
+				  short[] newa = Arrays.copyOfRange(by, i*1024,(i*1024)+1024);
+				  indices.add(newa);
+				  i++;
+			  }
+		 }else {
+			 indices.add(by);
+		 }
+				
+				 
+		
+		
 			return mesh2;
 		}
 	}
